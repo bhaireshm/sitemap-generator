@@ -67,7 +67,7 @@ function generateSitemap(jobs) {
 
         jobs.forEach(job => {
             urls += `<url>
-                        <loc>${config.url}/${job.jobId}?/${job.jobTitle}</loc>
+                        <loc>${config.url}/${job.jobId}?${job.jobTitle.replace(/\s/g, '+')}</loc>
                         <lastmod>${modifiedDate}</lastmod>
                         <changefreq>${config.changeFrequecy}</changefreq>
                     </url>`;
