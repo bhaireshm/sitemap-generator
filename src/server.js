@@ -1,4 +1,5 @@
 const config = require('./config');
+// console.log(config);
 const {
     showError,
     log
