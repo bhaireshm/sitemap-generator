@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start": "EXPORT DEBUG=LOGGER,DATABASE && nodemon main --port 4424",
-    "start-on-local": "SET DEBUG=LOGGER,DATABASE && nodemon main --port 4424"
+    "start": "EXPORT DEBUG=LOGGER,DATABASE && nodemon main",
+    "start-on-local": "SET DEBUG=LOGGER,DATABASE && nodemon main --port 3000"
   },
   "author": "",
   "license": "ISC",

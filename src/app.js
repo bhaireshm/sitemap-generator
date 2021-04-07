@@ -1,4 +1,7 @@
-const nodemon = require('nodemon').on('restart', function () {
+// const app = require('express')();
+
+const nodemon = require('nodemon');
+nodemon.on('restart', function () {
     db.destroyConnection();
 });
 const db = require('./server');
@@ -36,7 +39,7 @@ setInterval(function () {
         log('Restarted...');
         start();
     }
-}, 1000); // * 60 * 60 * 12); // 12 hrs
+}, 1000 * 60); // * 60 * 12); // 12 hrs
 
 function start() {
     showTime('Auto sitemap ganeration process started at', schedule.lastTriggeredTime);
@@ -81,7 +84,7 @@ function generateSitemap(jobs) {
         // log(xmlFormat);
 
         // create xml
-        createFile("sitemap-jobs.xml", xmlFormat);
+        createFile("jobs-sitemap.xml", xmlFormat);
     }
 }
 
@@ -89,10 +92,32 @@ function createFile(name, data) {
     fs.writeFile(name, data, function (err) {
         if (err) return showError(err);
         log(name + ' generated');
+
+        // Copy Files
+        copyFiles();
+    });
+}
+
+function copyFiles() {
+    const exec = require('child_process').exec;
+    const shellScript = exec('sh copy-sitemap.sh');
+    shellScript.stdout.on('data', (data) => {
+        console.log("FILE COPIED: ", data);
+        // do whatever you want here with data
+    });
+    shellScript.stderr.on('data', (data) => {
+        console.error("FILE COPY FAILED: ", data);
+        // exec('kill -9 $(lsof -t -i:3215)');
+        // exec('TASKKILL /PID 3215', d => {
+        //     console.log(d)
+        // });
+        // process.exit();
     });
 }
 
 // send mail to all if sitemap generation fail
+
+// app.listen(3215, () => log('Sitemap Generator Started...'));
 
 module.exports = {
     schedule,
