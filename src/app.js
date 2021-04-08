@@ -1,5 +1,3 @@
-// const app = require('express')();
-
 const nodemon = require('nodemon');
 nodemon.on('restart', function () {
     db.destroyConnection();
@@ -116,8 +114,6 @@ function copyFiles() {
 }
 
 // send mail to all if sitemap generation fail
-
-// app.listen(3215, () => log('Sitemap Generator Started...'));
 
 module.exports = {
     schedule,
