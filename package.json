@@ -4,15 +4,15 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start": "nodemon main",
-    "start-on-local": "(EXPORT DEBUG=LOGGER,DATABASE || SET DEBUG=LOGGER,DATABASE) && nodemon main"
+    "start": "nodemon main"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "debug": "^4.3.1",
+    "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "mysql": "^2.18.1",
+    "node-schedule": "^2.0.0",
     "nodemon": "^2.0.7"
   },
   "devDependencies": {}

@@ -1,47 +1,41 @@
-const nodemon = require('nodemon');
-nodemon.on('restart', function () {
+const nodemon = require('nodemon').on('restart', function () {
     db.destroyConnection();
 });
+const nodeScheduler = require('node-schedule');
+const fs = require('fs');
+
 const db = require('./server');
 const config = require('./config');
-const fs = require('fs');
 const {
     showTime,
     showError,
     log
 } = require('./logger');
 
-var schedule = {
-    serverStartedTime: new Date().getTime(),
+var timeSchedule = {
+    serverStartedTime: new Date().setMilliseconds(new Date().getMilliseconds() + 1000),
     lastTriggeredTime: null,
     nextTriggerTime: null,
+    cron: config.cron
 }
 
-schedule.lastTriggeredTime = schedule.serverStartedTime;
-schedule.nextTriggerTime = new Date().setDate(new Date(schedule.serverStartedTime).getDate() + config.changeFrequecyInDays);
-// schedule.nextTriggerTime = new Date().setMilliseconds(new Date(schedule.serverStartedTime).getMilliseconds() + 1000 * 10);
+timeSchedule.lastTriggeredTime = timeSchedule.serverStartedTime;
+// timeSchedule.nextTriggerTime = new Date().setDate(new Date(timeSchedule.serverStartedTime).getDate() + config.changeFrequecyInDays);
+// timeSchedule.nextTriggerTime = new Date().setMilliseconds(new Date(timeSchedule.serverStartedTime).getMilliseconds() + 1000 * 10);
 
-// Trigger On start of server
-start();
+const job = nodeScheduler.scheduleJob(timeSchedule.cron, function (fireDate) {
+    const currTime = new Date(fireDate).getTime();
+    timeSchedule.lastTriggeredTime = currTime;
+    // timeSchedule.nextTriggerTime = new Date().setDate(new Date(currTime).getDate() + config.changeFrequecyInDays);
+    timeSchedule.nextTriggerTime = new Date().setMilliseconds(new Date(timeSchedule.serverStartedTime).getMilliseconds() + 1000 * 60);
 
-// Checks every 12hrs
-setInterval(function () {
-    const currTime = new Date().getTime();
-    showTime('Current time', currTime);
-    showTime('Trigger time', schedule.nextTriggerTime);
-    log('--------------------------------------------------------------------------');
-
-    if (schedule.nextTriggerTime < currTime) {
-        schedule.nextTriggerTime = new Date().setDate(new Date(schedule.serverStartedTime).getDate() + config.changeFrequecyInDays);
-        schedule.lastTriggeredTime = currTime;
-        log('Restarted...');
-        start();
-    }
-}, 1000 * 60); // * 60 * 12); // 12 hrs
+    start();
+});
 
 function start() {
-    showTime('Auto sitemap ganeration process started at', schedule.lastTriggeredTime);
-
+    showTime('Auto sitemap ganeration process started at', timeSchedule.lastTriggeredTime);
+    log('---------------------------------------------------------------------------------');
+    
     db.getConnection((err, con) => {
         if (err) {
             log(new Error(err));
@@ -55,13 +49,15 @@ function start() {
 
             // all tasks completed closing db connection
             db.destroyConnection();
+
+            showTime("Next Triggers's at", timeSchedule.nextTriggerTime);
+            log('---------------------------------------------------------------------------------');
+            // console.log(job);
         });
     });
 }
 
 function generateSitemap(jobs) {
-    // log(jobs);
-
     if (jobs.length > 0) {
         let urls = '',
             modifiedDate = new Date().toISOString().substr(0, 10);
@@ -100,22 +96,16 @@ function copyFiles() {
     const exec = require('child_process').exec;
     const shellScript = exec('sh copy-sitemap.sh');
     shellScript.stdout.on('data', (data) => {
-        console.log("FILE COPIED: ", data);
-        // do whatever you want here with data
+        log("FILE COPIED ", data);
     });
     shellScript.stderr.on('data', (data) => {
-        console.error("FILE COPY FAILED: ", data);
-        // exec('kill -9 $(lsof -t -i:3215)');
-        // exec('TASKKILL /PID 3215', d => {
-        //     console.log(d)
-        // });
-        // process.exit();
+        log("FILE COPY FAILED ", data);
     });
 }
 
 // send mail to all if sitemap generation fail
 
 module.exports = {
-    schedule,
+    schedule: timeSchedule,
     showTime
 };

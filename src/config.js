@@ -9,5 +9,5 @@ module.exports = {
     url: process.env.SITEMAP_URL,
     changeFrequecy: process.env.CHANGE_FREQUENCY,
     changeFrequecyInDays: Number(process.env.CHANGE_FREQUENCY_IN_DAYS),
-    xmlFolder: process.env.XML_FOLDER
+    cron: process.env.CRON,
 }

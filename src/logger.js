@@ -1,18 +1,19 @@
-const logger = require('debug')('LOGGER');
-const db_log = require('debug')('DATABASE');
+const chalk = require('chalk');
+const db = "DATABASE: ";
+const logger = "LOGGER  : ";
 
 function showError(msg) {
     const err = new Error(msg);
-    db_log(err);
+    console.error(chalk.bgWhite.black(db), chalk.red(msg));
     return err;
 }
 
 function log(msg) {
-    logger(msg);
+    console.log(chalk.bold(logger), chalk.yellow(msg));
 }
 
 function showTime(s, t) {
-    logger(`${s} : ${new Date(t).toString()}`);
+    console.log(chalk.bold(logger), chalk.cyan(`${s} : ${new Date(t).toString()}`));
 }
 
 module.exports = {
