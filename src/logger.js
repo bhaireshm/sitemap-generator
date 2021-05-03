@@ -1,10 +1,10 @@
 const chalk = require('chalk');
-const db = "DATABASE: ";
-const logger = "LOGGER  : ";
+const db = "[DATABASE] ";
+const logger = "[LOGGER]   ";
 
 function showError(msg) {
     const err = new Error(msg);
-    console.error(chalk.bgWhite.black(db), chalk.red(msg));
+    console.error(chalk.bold(db), chalk.red(msg));
     return err;
 }
 

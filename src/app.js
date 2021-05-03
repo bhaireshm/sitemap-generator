@@ -20,22 +20,23 @@ var timeSchedule = {
 }
 
 timeSchedule.lastTriggeredTime = timeSchedule.serverStartedTime;
-// timeSchedule.nextTriggerTime = new Date().setDate(new Date(timeSchedule.serverStartedTime).getDate() + config.changeFrequecyInDays);
-// timeSchedule.nextTriggerTime = new Date().setMilliseconds(new Date(timeSchedule.serverStartedTime).getMilliseconds() + 1000 * 10);
+timeSchedule.nextTriggerTime = new Date().setDate(new Date(timeSchedule.serverStartedTime).getDate() + config.changeFrequecyInDays);
+
+// Initial start
+start();
 
 const job = nodeScheduler.scheduleJob(timeSchedule.cron, function (fireDate) {
     const currTime = new Date(fireDate).getTime();
     timeSchedule.lastTriggeredTime = currTime;
-    // timeSchedule.nextTriggerTime = new Date().setDate(new Date(currTime).getDate() + config.changeFrequecyInDays);
-    timeSchedule.nextTriggerTime = new Date().setMilliseconds(new Date(timeSchedule.serverStartedTime).getMilliseconds() + 1000 * 60);
+    timeSchedule.nextTriggerTime = new Date(currTime).setDate(new Date(currTime).getDate() + config.changeFrequecyInDays);
 
     start();
 });
 
 function start() {
-    showTime('Auto sitemap ganeration process started at', timeSchedule.lastTriggeredTime);
+    showTime('Cron Job triggered at', timeSchedule.lastTriggeredTime);
     log('---------------------------------------------------------------------------------');
-    
+
     db.getConnection((err, con) => {
         if (err) {
             log(new Error(err));
@@ -48,11 +49,10 @@ function start() {
             generateSitemap(jobs);
 
             // all tasks completed closing db connection
-            db.destroyConnection();
+            // db.endConnection();
 
             showTime("Next Triggers's at", timeSchedule.nextTriggerTime);
             log('---------------------------------------------------------------------------------');
-            // console.log(job);
         });
     });
 }
