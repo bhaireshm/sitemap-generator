@@ -13,7 +13,7 @@ const conn = mysql.createConnection({
 });
 
 conn.connect((err) => {
-  if (err) return callback(showError(err));
+  if (err) return showError(err);
   log("DB Connected.");
 });
 
