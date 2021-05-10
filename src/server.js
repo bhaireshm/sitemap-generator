@@ -58,6 +58,7 @@ function endConnection() {
   if (conn) {
     conn.release(function (err) {
       log(err);
+      pool.end();
     });
   }
 }
