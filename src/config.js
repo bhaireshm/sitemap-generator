@@ -1,13 +1,15 @@
-const dotenv = require("dotenv");
-dotenv.config();
-module.exports = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER_NAME,
-  password: process.env.DB_PASSWORD,
-  schema: process.env.DB_SCHEMA,
-  url: process.env.SITEMAP_URL,
-  changeFrequecy: process.env.CHANGE_FREQUENCY,
-  changeFrequecyInDays: +process.env.CHANGE_FREQUENCY_IN_DAYS,
-  cron: process.env.CRON,
+const dotenv = require("dotenv").config();
+
+const config = {
+  host: process.env.SITEMAP_DB_HOST,
+  port: process.env.SITEMAP_DB_PORT,
+  user: process.env.SITEMAP_DB_USER_NAME,
+  password: process.env.SITEMAP_DB_PASSWORD,
+  schema: process.env.SITEMAP_DB_SCHEMA,
+  url: process.env.SITEMAP_SITEMAP_URL,
+  changeFrequecy: process.env.SITEMAP_CHANGE_FREQUENCY,
+  changeFrequecyInDays: +process.env.SITEMAP_CHANGE_FREQUENCY_IN_DAYS,
+  cron: process.env.SITEMAP_CRON,
 };
+
+module.exports = config;

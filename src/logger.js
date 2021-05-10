@@ -1,23 +1,34 @@
-const chalk = require('chalk');
+const chalk = require("chalk");
 const db = "[DATABASE] ";
 const logger = "[LOGGER]   ";
 
-function showError(msg) {
-    const err = new Error(msg);
-    console.error(chalk.bold(db), chalk.red(msg));
-    return err;
+function errorLog(msg) {
+  console.log(chalk.bold(logger), chalk.red(msg));
+}
+
+function dbErrorLog(msg) {
+  console.log(chalk.bold(db), chalk.red(msg));
 }
 
 function log(msg) {
-    console.log(chalk.bold(logger), chalk.yellow(msg));
+  console.log(chalk.bold(logger), chalk.yellow(msg));
+}
+
+function successLog(msg) {
+  console.log(chalk.bold(logger), chalk.green(msg));
 }
 
 function showTime(s, t) {
-    console.log(chalk.bold(logger), chalk.cyan(`${s} : ${new Date(t).toString()}`));
+  console.log(
+    chalk.bold(logger),
+    chalk.cyan(`${s} : ${new Date(t).toString()}`)
+  );
 }
 
 module.exports = {
-    showError,
-    showTime,
-    log
-}
+  errorLog,
+  showTime,
+  log,
+  successLog,
+  dbErrorLog,
+};
