@@ -15,7 +15,7 @@ var timeSchedule = {
   ),
   lastTriggeredTime: null,
   nextTriggerTime: null,
-  cron: config.cron, // "*/2 * * * *",
+  cron: "*/2 * * * *", // config.cron,
 };
 
 timeSchedule.lastTriggeredTime = timeSchedule.serverStartedTime;
