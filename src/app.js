@@ -68,7 +68,9 @@ function generateSitemap(jobs) {
       modifiedDate = new Date().toISOString().substr(0, 10);
 
     jobs.forEach((job) => {
-      const jobTitle = job.jobTitle.replace(/\s/g, "+");
+      const jobTitle = encodeURIComponent(job.jobTitle);
+      // .replace(/[^a-zA-Z0-9]/g, " ")
+      // .replace(/\s/g, "+");
       const url = `${config.url}/${job.jobId}?${jobTitle}`;
       //   log("Added url: " + url);
 

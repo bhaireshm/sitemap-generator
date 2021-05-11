@@ -80,10 +80,10 @@ function executeQuery(query, callback) {
 }
 
 function getAllJobs(callback) {
-  executeQuery(
-    `SELECT id as jobId, job_title as jobTitle from ${config.schema}.job`,
-    callback
-  );
+  const removeDelistedJobs = `INNER JOIN ${config.schema}.job_application ON ${config.schema}.job.id = ${config.schema}.job_application.job_id AND ${config.schema}.job_application.status_id != 11`;
+  const query = `SELECT ${config.schema}.job.id AS jobId, ${config.schema}.job.job_title AS jobTitle FROM ${config.schema}.job`;
+
+  executeQuery(query, callback);
 }
 
 module.exports = {
