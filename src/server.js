@@ -80,8 +80,12 @@ function executeQuery(query, callback) {
 }
 
 function getAllJobs(callback) {
-  const removeDelistedJobs = `INNER JOIN ${config.schema}.job_application ON ${config.schema}.job.id = ${config.schema}.job_application.job_id AND ${config.schema}.job_application.status_id != 11`;
-  const query = `SELECT ${config.schema}.job.id AS jobId, ${config.schema}.job.job_title AS jobTitle FROM ${config.schema}.job`;
+  // const removeDelistedJobs = `INNER JOIN ${config.schema}.job_application ja ON j.id = ja.job_id AND ja.status_id != 11`;
+  // const query = `SELECT DISTINCT j.id AS jobId, j.job_title AS jobTitle FROM ${config.schema}.job AS j ${removeDelistedJobs}`;
+
+  const query = `SELECT DISTINCT ja.job_id AS jobId, j.job_title AS jobTitle 
+                  FROM ${config.schema}.job_application AS ja JOIN ${config.schema}.job AS j 
+                  ON j.id = ja.job_id WHERE ja.status_id != 11`;
 
   executeQuery(query, callback);
 }
