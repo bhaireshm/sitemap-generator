@@ -43,8 +43,9 @@ function getConnection(callback) {
 function handleDisconnect(callback) {
   conn.on("error", function (err) {
     if (!err.fatal) return;
-    if (err.code !== "PROTOCOL_CONNECTION_LOST") throw err;
+    // if (err.code !== "PROTOCOL_CONNECTION_LOST") throw err;
     console.log("Re-connecting lost connection: " + err.stack);
+    throw err;
     // conn = mysql.createConnection(conn.config);
     // handleDisconnect(conn);
     // conn.connect((err) => {
